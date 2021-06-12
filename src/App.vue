@@ -544,7 +544,7 @@ export default {
           case "LRU":
             this.LRU();
             break;
-          case "LFO":
+          case "LFU":
             this.LFU();
             break;
           case "Clock":
