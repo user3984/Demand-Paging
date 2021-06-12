@@ -534,32 +534,39 @@ export default {
     },
 
     getRecord() {
-      switch (this.value) {
-        case "FIFO":
-          this.FIFO();
-          break;
-        case "LRU":
-          this.LRU();
-          break;
-        case "LFO":
-          this.LFU();
-          break;
-        case "Clock":
-          this.Clock();
-          break;
-        default:
-          this.OPT();
+      if (this.page.length == 0) {
+        alert("请先开始模拟!");
+      } else {
+        switch (this.value) {
+          case "FIFO":
+            this.FIFO();
+            break;
+          case "LRU":
+            this.LRU();
+            break;
+          case "LFO":
+            this.LFU();
+            break;
+          case "Clock":
+            this.Clock();
+            break;
+          default:
+            this.OPT();
+        }
       }
     },
     main() {
       this.addr = this.getSeq();
       this.getPage();
 
+      this.result[0].count = this.OPT();
       this.result[1].count = this.FIFO();
       this.result[2].count = this.LRU();
       this.result[3].count = this.LFU();
       this.result[4].count = this.Clock();
-      this.result[0].count = this.OPT();
+      
+      this.getRecord();
+
       for (var i = 0; i < 5; ++i) {
         this.result[i].ratio = this.result[i].count / 320;
       }
