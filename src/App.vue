@@ -4,7 +4,7 @@
     <el-button type="primary" @click="main">开始模拟</el-button>
     <el-container style="solid #eee">
       <el-row :gutter="100">
-        <el-col :span="12">
+        <el-col :span="8">
           <el-card style="border-radius: 12px">
             <h3>模拟结果</h3>
             <el-table :data="result" stripe style="width: 500px">
@@ -17,7 +17,7 @@
             </el-table>
           </el-card>
         </el-col>
-        <el-col :span="12">
+        <el-col :span="16">
           <el-card style="border-radius: 12px">
             <h3>显示内存中的页面</h3>
             <el-row>
@@ -36,10 +36,14 @@
                 <el-button type="primary" @click="getRecord">查看</el-button>
               </el-col>
             </el-row>
-            <el-table :data="record" stripe style="width: 500px" height="400px">
+            <el-table :data="record" stripe style="width: 800px" height="400px">
               <el-table-column prop="num" label="指令" align="center">
               </el-table-column>
               <el-table-column prop="addr" label="逻辑地址" align="center">
+              </el-table-column>
+              <el-table-column prop="paddr" label="物理地址" align="center">
+              </el-table-column>
+              <el-table-column prop="miss" label="是否缺页" align="center">
               </el-table-column>
               <el-table-column prop="mem0" label="内存块0" align="center">
               </el-table-column>
@@ -156,6 +160,8 @@ export default {
             this.record.push({
               num: i,
               addr: this.addr[i],
+              paddr: (this.addr[i] % 10) + j * 10,
+              miss: "否",
               mem0: memory[0],
               mem1: memory[1],
               mem2: memory[2],
@@ -176,6 +182,8 @@ export default {
               this.record.push({
                 num: i,
                 addr: this.addr[i],
+                paddr: (this.addr[i] % 10) + j * 10,
+                miss: "是",
                 mem0: memory[0],
                 mem1: memory[1],
                 mem2: memory[2],
@@ -209,6 +217,8 @@ export default {
             this.record.push({
               num: i,
               addr: this.addr[i],
+              paddr: (this.addr[i] % 10) + replacePage * 10,
+              miss: "是",
               mem0: memory[0],
               mem1: memory[1],
               mem2: memory[2],
@@ -235,6 +245,8 @@ export default {
             this.record.push({
               num: i,
               addr: this.addr[i],
+              paddr: (this.addr[i] % 10) + j * 10,
+              miss: "否",
               mem0: memory[0],
               mem1: memory[1],
               mem2: memory[2],
@@ -256,6 +268,8 @@ export default {
               this.record.push({
                 num: i,
                 addr: this.addr[i],
+                paddr: (this.addr[i] % 10) + j * 10,
+                miss: "是",
                 mem0: memory[0],
                 mem1: memory[1],
                 mem2: memory[2],
@@ -272,6 +286,8 @@ export default {
             this.record.push({
               num: i,
               addr: this.addr[i],
+              paddr: (this.addr[i] % 10) + replacePage * 10,
+              miss: "是",
               mem0: memory[0],
               mem1: memory[1],
               mem2: memory[2],
@@ -299,6 +315,8 @@ export default {
             this.record.push({
               num: i,
               addr: this.addr[i],
+              paddr: (this.addr[i] % 10) + j * 10,
+              miss: "否",
               mem0: memory[0],
               mem1: memory[1],
               mem2: memory[2],
@@ -320,6 +338,8 @@ export default {
               this.record.push({
                 num: i,
                 addr: this.addr[i],
+                paddr: (this.addr[i] % 10) + j * 10,
+                miss: "是",
                 mem0: memory[0],
                 mem1: memory[1],
                 mem2: memory[2],
@@ -343,6 +363,8 @@ export default {
             this.record.push({
               num: i,
               addr: this.addr[i],
+              paddr: (this.addr[i] % 10) + replacePage * 10,
+              miss: "是",
               mem0: memory[0],
               mem1: memory[1],
               mem2: memory[2],
@@ -370,6 +392,8 @@ export default {
             this.record.push({
               num: i,
               addr: this.addr[i],
+              paddr: (this.addr[i] % 10) + j * 10,
+              miss: "否",
               mem0: memory[0],
               mem1: memory[1],
               mem2: memory[2],
@@ -391,6 +415,8 @@ export default {
               this.record.push({
                 num: i,
                 addr: this.addr[i],
+                paddr: (this.addr[i] % 10) + j * 10,
+                miss: "是",
                 mem0: memory[0],
                 mem1: memory[1],
                 mem2: memory[2],
@@ -414,6 +440,8 @@ export default {
             this.record.push({
               num: i,
               addr: this.addr[i],
+              paddr: (this.addr[i] % 10) + replacePage * 10,
+              miss: "是",
               mem0: memory[0],
               mem1: memory[1],
               mem2: memory[2],
@@ -442,6 +470,8 @@ export default {
             this.record.push({
               num: i,
               addr: this.addr[i],
+              paddr: (this.addr[i] % 10) + j * 10,
+              miss: "否",
               mem0: memory[0],
               mem1: memory[1],
               mem2: memory[2],
@@ -463,6 +493,8 @@ export default {
               this.record.push({
                 num: i,
                 addr: this.addr[i],
+                paddr: (this.addr[i] % 10) + j * 10,
+                miss: "是",
                 mem0: memory[0],
                 mem1: memory[1],
                 mem2: memory[2],
@@ -480,15 +512,17 @@ export default {
               } else {
                 memory[p] = this.page[i]; // 替换
                 refbits[p] = 1;
-                p = (p + 1) % 4; // 循环指向下一个页面
                 this.record.push({
                   num: i,
                   addr: this.addr[i],
+                  paddr: (this.addr[i] % 10) + p * 10,
+                  miss: "是",
                   mem0: memory[0],
                   mem1: memory[1],
                   mem2: memory[2],
                   mem3: memory[3],
                 });
+                p = (p + 1) % 4; // 循环指向下一个页面
                 break;
               }
             }
